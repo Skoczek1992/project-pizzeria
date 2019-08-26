@@ -58,7 +58,53 @@
 
       thisProduct.id = id;
       thisProduct.data = data;
+
+      thisProduct.renderInMenu();
+      thisProduct.initAcordion();
+
       console.log('thisProduct' , thisProduct);
+    }
+
+    renderInMenu(){
+      const thisProduct = this;
+
+      /* generate HTML based on template */
+      const generatedHTML = templates.menuProduct(thisProduct.data);
+
+      /* create element using utilis.createElementFromHTML */
+      thisProduct.element = utils.createDOMFromHTML(generatedHTML);
+
+      /* find menu container */
+      const menuContainer = document.querySelector(select.containerOf.menu0);
+
+      /* add element to menu */
+      menuContainer.appendChild(thisProduct.element);
+    }
+
+    initAcordion(){
+      const thisProduct = this;
+
+    /* find the clickable trigger (the element should react to clicking ) */
+
+    /* START: click event listener to trigger */
+
+    /* prevent defaul */
+
+    /* toogle active class on element */
+
+    /* find all active product */
+
+    /* START LOOP: for each active product */
+
+      /* START if the active product isn't the element of thisProduct */
+
+        /*  remove class active for the active product */
+
+      /* END: if the active product isn't the element of thisProduct */
+
+    /* END LOOP: for each active product */
+
+    /* END click event listener to trigger */
     }
   }
 
