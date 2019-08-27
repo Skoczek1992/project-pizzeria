@@ -85,26 +85,40 @@
       const thisProduct = this;
 
     /* find the clickable trigger (the element should react to clicking ) */
+    const trigger = thisProduct.querySelector('select.menuProduct.clickable');
+    document.getElementById("myBtn").onclick = displayDate;  // Czy to jest ten drugi człon tego kodu?
 
     /* START: click event listener to trigger */
+    const buttonClicked = thisProduct.querySelector(select.menuProduct.clickable);
+    buttonClicked.addEventListener('click' , function(event){
+      console.log('clicked');
 
-    /* prevent defaul */
+      /* prevent default */
+      event.preventDefault();
 
-    /* toogle active class on element */
+      /* toogle active class on element of thisProduct */
+      thisProduct.element.classList.toogle('active');
 
-    /* find all active product */
+      /* find all active product */
+      const activeProdcuts = document.querySelectorAll('article.product.acitve');
 
-    /* START LOOP: for each active product */
+      /* START LOOP: for each active product */
+      for(let active of activeProdcuts){
 
-      /* START if the active product isn't the element of thisProduct */
+        /* START if the active product isn't the element of thisProduct */
+        if(thisProduct.element != ".active");
 
         /*  remove class active for the active product */
+        acitve.classList.remove('active');
 
-      /* END: if the active product isn't the element of thisProduct */
-
-    /* END LOOP: for each active product */
+        /* END: if the active product isn't the element of thisProduct */
+       if (thisProduct.element != ".active")
+          break;
+        /* END LOOP: for each active product */
+        }
 
     /* END click event listener to trigger */
+    });
     }
   }
 
