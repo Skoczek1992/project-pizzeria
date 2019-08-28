@@ -52,7 +52,7 @@
     menuProduct: Handlebars.compile(document.querySelector(select.templateOf.menuProduct).innerHTML),
   };
 
-  class Product{
+  class Product {
     constructor(id, data){
       const thisProduct = this;
 
@@ -75,7 +75,7 @@
       thisProduct.element = utils.createDOMFromHTML(generatedHTML);
 
       /* find menu container */
-      const menuContainer = document.querySelector(select.containerOf.menu0);
+      const menuContainer = document.querySelector(select.containerOf.menu);
 
       /* add element to menu */
       menuContainer.appendChild(thisProduct.element);
@@ -85,35 +85,30 @@
       const thisProduct = this;
 
     /* find the clickable trigger (the element should react to clicking ) */
-    const trigger = thisProduct.querySelector('select.menuProduct.clickable');
-    document.getElementById("myBtn").onclick = displayDate;  // Czy to jest ten drugi człon tego kodu?
+    const trigger = thisProduct.element.querySelector(select.menuProduct.clickable);
 
     /* START: click event listener to trigger */
-    const buttonClicked = thisProduct.querySelector(select.menuProduct.clickable);
-    buttonClicked.addEventListener('click' , function(event){
+    trigger.addEventListener('click' , function(event){
       console.log('clicked');
 
       /* prevent default */
       event.preventDefault();
 
-      /* toogle active class on element of thisProduct */
-      thisProduct.element.classList.toogle('active');
+      /* toggle active class on element of thisProduct */
+      thisProduct.element.classList.toggle('active');
 
       /* find all active product */
-      const activeProdcuts = document.querySelectorAll('article.product.acitve');
+      const activeProdcuts = document.querySelectorAll('article.product.active');
 
       /* START LOOP: for each active product */
       for(let active of activeProdcuts){
 
         /* START if the active product isn't the element of thisProduct */
-        if(thisProduct.element != ".active");
+        if(active != thisProduct.element) {
+          /*  remove class active for the active product */
+          active.classList.remove('active');
+        }
 
-        /*  remove class active for the active product */
-        acitve.classList.remove('active');
-
-        /* END: if the active product isn't the element of thisProduct */
-       if (thisProduct.element != ".active")
-          break;
         /* END LOOP: for each active product */
         }
 
@@ -122,13 +117,12 @@
     }
   }
 
-
   const app = {
     initMenu: function(){
       const thisApp = this;
       console.log('thisApp.data' , thisApp.data);
 
-      for(let productData in thisApp.data.product){
+      for(let productData in thisApp.data.products){
         new Product(productData, thisApp.data.products[productData]);
       }
     },
