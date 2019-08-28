@@ -84,36 +84,36 @@
     initAcordion(){
       const thisProduct = this;
 
-    /* find the clickable trigger (the element should react to clicking ) */
-    const trigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+      /* find the clickable trigger (the element should react to clicking ) */
+      const trigger = thisProduct.element.querySelector(select.menuProduct.clickable);
 
-    /* START: click event listener to trigger */
-    trigger.addEventListener('click' , function(event){
-      console.log('clicked');
+      /* START: click event listener to trigger */
+      trigger.addEventListener('click' , function(event){
+        console.log('clicked');
 
-      /* prevent default */
-      event.preventDefault();
+        /* prevent default */
+        event.preventDefault();
 
-      /* toggle active class on element of thisProduct */
-      thisProduct.element.classList.toggle('active');
+        /* toggle active class on element of thisProduct */
+        thisProduct.element.classList.toggle('active');
 
-      /* find all active product */
-      const activeProdcuts = document.querySelectorAll('article.product.active');
+        /* find all active product */
+        const activeProdcuts = document.querySelectorAll('article.product.active');
 
-      /* START LOOP: for each active product */
-      for(let active of activeProdcuts){
+        /* START LOOP: for each active product */
+        for(let active of activeProdcuts){
 
-        /* START if the active product isn't the element of thisProduct */
-        if(active != thisProduct.element) {
-          /*  remove class active for the active product */
-          active.classList.remove('active');
+          /* START if the active product isn't the element of thisProduct */
+          if(active != thisProduct.element) {
+            /*  remove class active for the active product */
+            active.classList.remove('active');
+          }
+
+          /* END LOOP: for each active product */
         }
 
-        /* END LOOP: for each active product */
-        }
-
-    /* END click event listener to trigger */
-    });
+        /* END click event listener to trigger */
+      });
     }
   }
 
