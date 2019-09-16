@@ -63,6 +63,7 @@
       thisProduct.getElements();
       thisProduct.initAcordion();
       thisProduct.initOrderForm();
+      thisProduct.initAmountWidget();
       thisProduct.processOrder();
 
       console.log('thisProduct' , thisProduct);
@@ -93,6 +94,7 @@
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
       thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
+      thisProduct.amountWidgetElem = thisProduct.element.querySelector(select.menuProduct.amountWidget);
     }
 
     initAcordion(){
@@ -129,84 +131,152 @@
         /* END click event listener to trigger */
       });
     }
-  }
 
-  initOrderForm() {
-    const thisProduct = this;
+    initOrderForm() {
+      const thisProduct = this;
 
-    thisProduct.form.addEventListener('submit', function(event){
-      event.preventDefault();
-      thisProduct.processOrder();
-    });
+      thisProduct.form.addEventListener('submit', function(event){
+        event.preventDefault();
+        thisProduct.processOrder();
+      });
 
-    for(let input of thisProduct.formInputs){
-      input.addEventListener('change', function(){
+      for(let input of thisProduct.formInputs){
+        input.addEventListener('change', function(){
+          thisProduct.processOrder();
+        });
+      }
+
+      thisProduct.cartButton.addEventListener('click', function(event){
+        event.preventDefault();
         thisProduct.processOrder();
       });
     }
 
-    thisProduct.cartButton.addEventListener('click', function(event){
-      event.preventDefault();
-      thisProduct.processOrder();
-    });
-  }
+    processOrder() {
+      const thisProduct = this;
+      console.log('processOrder', thisProduct);
 
-  processOrder() {
-    const thisProduct = this;
-    console.log('processOrder', thisProduct);
+      /* read all data from the form (using utils.serializeFormToObject) and save it to const formData */
+      const formData = utils.serializeFormToObject(thisProduct.form);
+      console.log('formData' , formData);
 
-    /* read all data from the form (using utils.serializeFormToObject) and save it to const formData */
-    const formData = utils.serializeFormToObject(thisProduct.form);
-    console.log('formData' , formData);
+      /* set variable price to equal thisProduct.data.price */
+      let price = thisProduct.data.price;
+      console.log('price:', price);
 
-    /* set variable price to equal thisProduct.data.price */
-    let price = thisProduct.data.price;
-    console.log('price:', price);
+      /* START LOOP: for each paramId in thisProduct.data.params */
+      for(let param in thisProduct.data.params){
+        console.log('Params:', param, thisProduct.data.params[param]);
+        /* save the element in thisProduct.data.params with key paramId as const param */
+        const param = thisProduct.data.params[paramId];
 
-    /* START LOOP: for each paramId in thisProduct.data.params */
-    for(let param in thisProduct.data.params){
-      console.log('Params:', param, thisProduct.data.params[param]);
-    /* save the element in thisProduct.data.params with key paramId as const param */
-      const param = thisProduct.data.params[paramId];
+        /* START LOOP: for each optionId in param.options */
+        for (let optionId in param.options) {
+          /* save the element in param.options with key optionId as const option */
+          const option = param.options[optionId];
 
-    /* START LOOP: for each optionId in param.options */
-      for (let optionId in param.options) {
-      /* save the element in param.options with key optionId as const option */
-        const option = param.options[optionId];
+          /* START IF: if option is selected and option is not default */
+          const optionSelected = formData.hasOwnProperty(paramId) && formData[paramId].indexOf(optionId) > -1;
 
-      /* START IF: if option is selected and option is not default */
-        const optionSelected = formData.hasOwnProperty(paramId) && formData[paramId].indexOf(optionId) > -1;
+          /* add price of option to variable price */
+          /* END IF: if option is selected and option is not default */
+          /* START ELSE IF: if option is not selected and option is default */
+          /* deduct price of option from price */
 
-        /* add price of option to variable price */
-      /* END IF: if option is selected and option is not default */
-      /* START ELSE IF: if option is not selected and option is default */
-        /* deduct price of option from price */
-        if (optionSelected && !option.default) {
-          price = price + option.price;
-        } else if (!optionSelected && option.default) {
-          price = price - option.price;
-        }
-        const images = thisProduct.imageWrapper;
+          if (optionSelected && !option.default) {
+            price = price + option.price;
+          } else if (!optionSelected && option.default) {
+            price = price - option.price;
+          }
+          const images = thisProduct.imageWrapper;
 
-        let classActive = classNames.menuProduct.imageVisible;
+          let classActive = classNames.menuProduct.imageVisible;
 
-        for(let image in images){
-          if(optionSelected){
-            image.classList.add(classActive);
-          }else{
-            image.classList.remove(classActive);
+          for(let image in images){
+            if(optionSelected){
+              image.classList.add(classActive);
+            }else{
+              image.classList.remove(classActive);
+            }
           }
         }
-
-      /* END ELSE IF: if option is not selected and option is default */
       }
-    /* END LOOP: for each optionId in param.options */
+      /* set the contents of thisProduct.priceElem to be the value of variable price */
+      /* multiply price by amount */
+      price *= thisProduct.amountWidget.value;
+      thisProduct.priceElem.innerHTML = price;
     }
-  /* END LOOP: for each paramId in thisProduct.data.params */
 
-  /* set the contents of thisProduct.priceElem to be the value of variable price */
-  thisProduct.priceElem.innerHTML = price;
-}
+
+    initAmountWidget(){
+      const thisProduct = this;
+
+      thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
+      thisProduct.amountWidgetElem.addEventListener('updated', function() {
+        thisProduct.processOrder();
+      });
+    }
+  }
+
+  class AmountWidget{
+    constructor(element){
+      const thisWidget = this;
+
+      thisWidget.getElements(element);
+      thisWidget.setValue(thisWidget.input.value);
+      thisWidget.value = settings.amountWidget.defaultValue;
+      
+
+      console.log('AmountWidget' , thisWidget);
+      console.log('constructor arguments:' , element);
+
+    }
+
+    getElements(element){
+      const thisWidget = this;
+
+      thisWidget.element = element;
+      thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
+      thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
+      thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
+    }
+
+    setValue(value){
+      const thisWidget = this;
+      const newValue = parseInt(value);
+
+      /* TODO: add validation */
+      if (settings.amountWidget.defaultMin <= newValue && newValue <= settings.amountWidget.defaultMax && newValue != thisWidget.value){
+        thisWidget.value = newValue;
+        thisWidget.announce();
+      }
+      thisWidget.input.value  = thisWidget.value;
+    }
+
+    initActions(){
+      const thisWidget = this;
+
+      thisWidget.input.addEventListener('change' , function(){
+        thisWidget.setValue(thisWidget.input.value);
+      });
+
+      thisWidget.linkDecrease.addEventListener('click', function(event){
+        event.preventDefault();
+        thisWidget.setValue(thisWidget.value -1);
+      });
+
+      thisWidget.linkIncrease.addEventListener('click', function(event){
+        event.preventDefault();
+        thisWidget.setValue(thisWidget.value +1);
+      });
+    }
+
+    announce(){
+      const thisWidget = this;
+
+      const event = new Event('updated');
+      thisWidget.element.dispatchEvent(event);
+    }
 
 
 
