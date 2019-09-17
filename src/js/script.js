@@ -6,6 +6,7 @@
   const select = {
     templateOf: {
       menuProduct: '#template-menu-product',
+      cartProduct: '#template-cart-product'
     },
     containerOf: {
       menu: '#product-list',
@@ -26,10 +27,28 @@
     },
     widgets: {
       amount: {
-        input: 'input[name="amount"]',
+        input: 'input.amount',
         linkDecrease: 'a[href="#less"]',
         linkIncrease: 'a[href="#more"]',
       },
+    },
+    cart: {
+      productList: '.cart__order-summary',
+      toggleTrigger: '.cart__summary',
+      totalNumber: `.cart__total-number`,
+      totalPrice: '.cart__total-price strong, .cart__order-total .cart__order-price-sum strong',
+      subtotalPrice: '.cart__order-subtotal .cart__order-price-sum strong',
+      deliveryFee: '.cart__order-delivery .cart__order-price-sum strong',
+      form: '.cart__order',
+      formSubmit: '.cart__order [type="submit"]',
+      phone: '[name="phone"]',
+      address: '[name="address"]',
+    },
+    cartProduct: {
+      amountWidget: '.widget-amount',
+      price: '.cart__product-price',
+      edit: '[href="#edit"]',
+      remove: '[href="#remove"]',
     },
   };
 
@@ -45,11 +64,16 @@
       defaultValue: 1,
       defaultMin: 1,
       defaultMax: 9,
-    }
+    },
+    cart: {
+      wrapperActive: 'active',
+      defaultDeliveryFee: 20,
+    },
   };
 
   const templates = {
     menuProduct: Handlebars.compile(document.querySelector(select.templateOf.menuProduct).innerHTML),
+    cartProduct: Handlebars.compile(document.querySelector(select.templateOf.cartProduct).innerHTML),
   };
 
   class Product {
@@ -72,16 +96,10 @@
     renderInMenu(){
       const thisProduct = this;
 
-      /* generate HTML based on template */
       const generatedHTML = templates.menuProduct(thisProduct.data);
-
-      /* create element using utilis.createElementFromHTML */
       thisProduct.element = utils.createDOMFromHTML(generatedHTML);
 
-      /* find menu container */
       const menuContainer = document.querySelector(select.containerOf.menu);
-
-      /* add element to menu */
       menuContainer.appendChild(thisProduct.element);
     }
 
@@ -100,35 +118,18 @@
     initAcordion(){
       const thisProduct = this;
 
-      /* find the clickable trigger (the element should react to clicking ) */
       const trigger = thisProduct.element.querySelector(select.menuProduct.clickable);
-
-      /* START: click event listener to trigger */
       thisProduct.accordionTrigger.addEventListener('click' , function(event){
         console.log('clicked');
-
-        /* prevent default */
         event.preventDefault();
-
-        /* toggle active class on element of thisProduct */
         thisProduct.element.classList.toggle('active');
 
-        /* find all active product */
         const activeProdcuts = document.querySelectorAll('article.product.active');
-
-        /* START LOOP: for each active product */
         for(let active of activeProdcuts){
-
-          /* START if the active product isn't the element of thisProduct */
           if(active != thisProduct.element) {
-            /*  remove class active for the active product */
             active.classList.remove('active');
           }
-
-          /* END LOOP: for each active product */
         }
-
-        /* END click event listener to trigger */
       });
     }
 
@@ -156,32 +157,20 @@
       const thisProduct = this;
       console.log('processOrder', thisProduct);
 
-      /* read all data from the form (using utils.serializeFormToObject) and save it to const formData */
       const formData = utils.serializeFormToObject(thisProduct.form);
       console.log('formData' , formData);
 
-      /* set variable price to equal thisProduct.data.price */
       let price = thisProduct.data.price;
       console.log('price:', price);
 
-      /* START LOOP: for each paramId in thisProduct.data.params */
       for(let paramId in thisProduct.data.params){
         console.log('Params:', param, thisProduct.data.params[paramId]);
-        /* save the element in thisProduct.data.params with key paramId as const param */
+
         const param = thisProduct.data.params[paramId];
-
-        /* START LOOP: for each optionId in param.options */
         for (let optionId in param.options) {
-          /* save the element in param.options with key optionId as const option */
+
           const option = param.options[optionId];
-
-          /* START IF: if option is selected and option is not default */
           const optionSelected = formData.hasOwnProperty(paramId) && formData[paramId].indexOf(optionId) > -1;
-
-          /* add price of option to variable price */
-          /* END IF: if option is selected and option is not default */
-          /* START ELSE IF: if option is not selected and option is default */
-          /* deduct price of option from price */
 
           if (optionSelected && !option.default) {
             price = price + option.price;
@@ -201,8 +190,6 @@
           }
         }
       }
-      /* set the contents of thisProduct.priceElem to be the value of variable price */
-      /* multiply price by amount */
       price *= thisProduct.amountWidget.value;
       thisProduct.priceElem.innerHTML = price;
     }
@@ -279,6 +266,32 @@
     }
   }
 
+  class Cart{
+    constructor(element){
+      const thisCart = this;
+
+      thisCart.products = [];
+      thisCart.getElements(element);
+      thisCart.initActions();
+      //console.log('new Cart' ,thisCart);
+    }
+
+    getElements(element){
+      const thisCart = thisCart;
+
+      thisCart.dom = {};
+      thisCart.dom.wrapper = element;
+      thisCart.dom.toggleTrigger = document.querySelector(select.cart.toggleTrigger);
+    }
+
+    initActions(){
+      const thisCart = this;
+
+      thisCart.dom.toggleTrigger.addEventListener('click' , function(){
+        thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
+      });
+    }
+  }
 
 
   const app = {
@@ -297,6 +310,13 @@
       thisApp.data = dataSource;
     },
 
+    initCart: function(){
+      const thisApp = this;
+
+      const cartElem = document.querySelector(select.containerOf.cart);
+      thisApp.cart = new Cart(cartElem);
+    },
+
     init: function(){
       const thisApp = this;
       console.log('*** App starting ***');
@@ -307,6 +327,7 @@
 
       thisApp.initData();
       thisApp.initMenu();
+      thisApp.initCart();
     },
   };
 
