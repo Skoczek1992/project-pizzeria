@@ -165,8 +165,8 @@
       console.log('price:', price);
 
       /* START LOOP: for each paramId in thisProduct.data.params */
-      for(let param in thisProduct.data.params){
-        console.log('Params:', param, thisProduct.data.params[param]);
+      for(let paramId in thisProduct.data.params){
+        console.log('Params:', param, thisProduct.data.params[paramId]);
         /* save the element in thisProduct.data.params with key paramId as const param */
         const param = thisProduct.data.params[paramId];
 
@@ -225,7 +225,7 @@
       thisWidget.getElements(element);
       thisWidget.setValue(thisWidget.input.value);
       thisWidget.value = settings.amountWidget.defaultValue;
-      
+
 
       console.log('AmountWidget' , thisWidget);
       console.log('constructor arguments:' , element);
@@ -277,6 +277,7 @@
       const event = new Event('updated');
       thisWidget.element.dispatchEvent(event);
     }
+  }
 
 
 
