@@ -161,7 +161,7 @@
       const formData = utils.serializeFormToObject(thisProduct.form);
       console.log('formData' , formData);
 
-      this.product.params = {};
+      thisProduct.params = {};
       /* set variable price to equal thisProduct.data.price */
       let price = thisProduct.data.price;
       console.log('price:', price);
