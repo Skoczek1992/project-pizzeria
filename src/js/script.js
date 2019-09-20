@@ -162,42 +162,46 @@
       console.log('formData' , formData);
 
       thisProduct.params = {};
+
       /* set variable price to equal thisProduct.data.price */
       let price = thisProduct.data.price;
       console.log('price:', price);
 
       for(let paramId in thisProduct.data.params){
-        console.log('Params:', param, thisProduct.data.params[paramId]);
 
         const param = thisProduct.data.params[paramId];
+        console.log('Params:', param, thisProduct.data.params[paramId]);
+
         for (let optionId in param.options) {
 
           const option = param.options[optionId];
           const optionSelected = formData.hasOwnProperty(paramId) && formData[paramId].indexOf(optionId) > -1;
+
+          console.log('Przed zmiana', price);
 
           if (optionSelected && !option.default) {
             price = price + option.price;
           } else if (!optionSelected && option.default) {
             price = price - option.price;
           }
-          const images = thisProduct.imageWrapper;
+
+          const image = thisProduct.imageWrapper.querySelector('.' + paramId +'-' + optionId);
 
           let classActive = classNames.menuProduct.imageVisible;
 
-          for(let image in images){
-            if(optionSelected){
-              if(!thisProduct.params[paramId]){
-                thisProduct.params[paramId] = {
-                  label: param.label,
-                  options:{}
-                };
-              }
-              thisProduct.params[paramId].options[optionId] = option.label;
-              image.classList.add(classActive);
-            }else{
-              image.classList.remove(classActive);
+          if(optionSelected){
+            if(!thisProduct.params[paramId]){
+              thisProduct.params[paramId] = {
+                label: param.label,
+                options:{}
+              };
             }
+            thisProduct.params[paramId].options[optionId] = option.label;
+            if(image) image.classList.add(classActive);
+          } else{
+            if(image) image.classList.remove(classActive);
           }
+
         }
       }
       /* multiply price by amount*/
@@ -221,8 +225,8 @@
     addToCart(){
       const thisProduct = this;
 
-      thisProduct.data.name = thisProduct.name;
-      thisProduct.amountWidget.value = thisProduct.amount;
+      thisProduct.name = thisProduct.data.name;
+      thisProduct.amount = thisProduct.amountWidget.value;
 
       app.cart.add(thisProduct);
     }
@@ -307,7 +311,7 @@
     }
 
     getElements(element){
-      const thisCart = thisCart;
+      const thisCart = this;
 
       thisCart.dom = {};
       thisCart.dom.wrapper = element;
@@ -326,7 +330,7 @@
       const thisCart = this;
 
       thisCart.dom.toggleTrigger.addEventListener('click' , function(){
-        thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
+        thisCart.dom.wrapper.classList.toggle(classNames.menuProduct.wrapperActive);
       });
 
       thisCart.dom.productList.addEventListener('updated', function(){
@@ -342,7 +346,7 @@
 
     add(menuProduct){
       const thisCart = this;
-      //console.log('adding prodcut' , menuProduct);
+      console.log('adding prodcut' , menuProduct);
 
       const generatedHTML = templates.cartProduct(menuProduct);
       console.log('generatedHTML:', generatedHTML);
@@ -470,7 +474,6 @@
 
     //END CartProduct
   }
-
 
   const app = {
     initMenu: function(){
