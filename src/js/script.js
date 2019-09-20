@@ -389,7 +389,7 @@
     remove(cartProduct){
       const thisCart = this;
 
-      const index = thisCart.products.indexOf(cartProducts);
+      const index = thisCart.products.indexOf(cartProduct);
       const removeProduct = thisCart.products.splice(index, 1);
 
       const removeDOM = cartProduct.dom.wrapper;
