@@ -1,6 +1,6 @@
-import {settings, select} from './settings.js';
-import Product form './components/Product.js';
-import Cart form './components/Cart.js';
+import {settings, select, classNames} from './settings.js';
+import Product from './components/Product.js';
+import Cart from './components/Cart.js';
 
   const app = {
     initMenu: function(){
@@ -57,7 +57,7 @@ import Cart form './components/Cart.js';
       console.log('thisApp:', thisApp);
       console.log('classNames:', classNames);
       console.log('settings:', settings);
-      console.log('templates:', templates);
+      
 
       thisApp.initData();
       //thisApp.initMenu();
