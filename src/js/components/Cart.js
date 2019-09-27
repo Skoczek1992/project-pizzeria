@@ -1,4 +1,4 @@
-import {settings, select, classNames, templates} from '../settings.js';
+import { settings, select, classNames, templates} from '../settings.js';
 import utils from '../utils.js';
 import CartProduct from './CartProduct.js';
 
@@ -9,7 +9,7 @@ class Cart{
     thisCart.products = [];
     thisCart.getElements(element);
     thisCart.initActions();
-    thisCart.deliveryFee = 20;
+    thisCart.deliveryFee = settings.cart.defaultDeliveryFee;
     //console.log('new Cart' ,thisCart);
   }
 
@@ -56,6 +56,7 @@ class Cart{
 
   sendOrder(){
     const thisCart = this;
+    const url = settings.db.url + '/' + settings.db.order;
 
     const payload = {
       address: 'test',
@@ -135,7 +136,7 @@ class Cart{
     const thisCart = this;
 
     const index = thisCart.products.indexOf(cartProduct);
-    const removeProduct = thisCart.products.splice(index, 1);
+    thisCart.products.splice(index, 1);
 
     const removeDOM = cartProduct.dom.wrapper;
     removeDOM.remove();

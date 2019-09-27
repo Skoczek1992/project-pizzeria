@@ -45,7 +45,7 @@ class Product {
   initAcordion(){
     const thisProduct = this;
 
-    const trigger = thisProduct.element.querySelector(select.menuProduct.clickable);
+    
     thisProduct.accordionTrigger.addEventListener('click' , function(event){
       console.log('clicked');
       event.preventDefault();
