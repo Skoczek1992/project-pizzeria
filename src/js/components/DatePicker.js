@@ -29,7 +29,7 @@ class DatePicker extends BaseWidget {
       },
       disable: [
         function (date) {
-          return date.getDay() === 1;
+          return date.getDay() === 6 || date.getDay() === 0;
         }
       ],
       onChange: function (selectedDates, dateStr) {
@@ -49,7 +49,6 @@ class DatePicker extends BaseWidget {
     return true;
   }
 
-  renderValue() {}
 }
 
 export default DatePicker;

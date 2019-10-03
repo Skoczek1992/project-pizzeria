@@ -16,11 +16,12 @@ class BaseWidget {
 
   set value(value){
     const thisWidget = this;
+    console.log(value);
 
     const newValue = thisWidget.parseValue(value);
 
     /* TODO: add validation */
-    if (newValue != thisWidget.correctValue && thisWidget.isValid(newValue)){
+    if (newValue != thisWidget.correctValue && thisWidget.isValid(value)){
       thisWidget.correctValue = newValue;
       thisWidget.announce();
     }
@@ -48,7 +49,6 @@ class BaseWidget {
     const thisWidget = this;
 
     thisWidget.dom.wrapper.innerHTML = thisWidget.value;
-
   }
 
   announce(){
@@ -57,7 +57,6 @@ class BaseWidget {
     const event = new CustomEvent('updated', {
       bubbles: true
     });
-
 
     thisWidget.dom.wrapper.dispatchEvent(event);
   }
