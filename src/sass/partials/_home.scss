@@ -1,37 +1,37 @@
 /* global */
 
-
 section,
 footer {
   margin: auto;
   width: 700px;
   border-radius: 4px;
-  background-color: #fff;
+  background-color: $color-light;
 }
+
 
 .boxes {
   margin-top: 48px;
 }
 
 .boxes .card {
-  color: #fff;
+  color: $color-light;
 
   a {
     text-decoration: none;
-    color: #fff;
+    color: $color-light;
 
     h3 {
-      font-family: 'Oswald', sans-serif;
+      font-family: $font-header;
       font-size: 26px;
-      font-weight: 700;
+      font-weight: $font-bold;
       letter-spacing: -0.65px;
-      transition: all .3s;
+      transition: $transition;
       line-height: 50px;
     }
 
     p {
       opacity: 0;
-      transition: all .3s;
+      transition: $transition;
       margin-bottom: 0;
     }
   }
@@ -57,12 +57,12 @@ footer {
 .boxes .opening {
   width: 100%;
   height: 120px;
-  background-color: #ff6b6b;
+  background-color: $color-main;
 
   h3 {
-    font-family: 'Oswald', sans-serif;
+    font-family: $font-header;
     font-size: 26px;
-    font-weight: 700;
+    font-weight: $font-bold;
     letter-spacing: -0.65px;
   }
 }
@@ -94,20 +94,21 @@ ol.carousel-indicators li.active {
   top: 50%;
   transform: translateY(-50%);
 }
+
 .carousel-item {
   h4 {
-    font-weight: 700;
-    font-family: 'Lato', sans-serif;
+    font-weight: $font-bold;
+    font-family: $font-text;
     font-size: 14px;
   }
+
   p,
   i {
-    font-family: 'Lato', sans-serif;
+    font-family: $font-text;
     font-size: 14px;
     line-height: 23px;
   }
 }
-
 
 .gallery img {
   width: 100%;
@@ -118,18 +119,18 @@ ol.carousel-indicators li.active {
 .heart,
 .branch {
   font-size: 30px;
-  color: #fff;
-  transition: all .3s;
+  color: $color-light;
+  transition: $transition;
 }
 
 .heart:hover,
 .branch:hover {
-  color: #ff6b6b;
+  color: $color-main;
 }
 
 .ovl {
   opacity: 0;
-  transition: all .3s;
+  transition: $transition;
 }
 
 .ovl:hover {
@@ -140,13 +141,14 @@ ol.carousel-indicators li.active {
 
 footer {
   margin-bottom: 48px;
+
   a {
-    color: #ff6b6b;
+    color: $color-main;
     text-decoration: underline;
   }
 }
 
 footer a:hover {
-  color: #ff6b6b;
-  font-weight: 700;
+  color: $color-main;
+  font-weight: $font-bold;
 }

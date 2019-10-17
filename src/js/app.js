@@ -73,7 +73,6 @@ const app = {
 
         thisApp.data.products = parsedResponse;
 
-        /*execute initMenu method */
         thisApp.initMenu();
 
       });
